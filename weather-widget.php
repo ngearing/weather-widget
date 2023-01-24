@@ -67,8 +67,6 @@ function ng_shortcode_ww( $attrs = array() ) {
 
 	$content = '';
 
-	$content .= sprintf( '<img src="%s" class="mock"/>', NG_WW_URI . 'mock.png' );
-
 	$last_data = get_option( 'ng_ww_time' );
 	$data      = file_get_contents( NG_WW_PATH . "/ww-data_for-200-$last_data.json" );
 	$data      = json_decode( $data );
@@ -86,9 +84,7 @@ function ng_shortcode_ww( $attrs = array() ) {
 	date_default_timezone_set( wp_timezone_string() );
 
 	$content .= sprintf( '<ul class="weather-widget-list">' );
-
 	$content .= sprintf( '<h4 class="time">%s</h4>', date( 'M d, H:ia' ) );
-
 	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
 
 	foreach ( $days as $key => $day ) :
