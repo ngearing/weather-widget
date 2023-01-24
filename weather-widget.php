@@ -18,8 +18,8 @@ define( 'NG_WW_API', 'eaad7c88ca3be3e5552347b4bee21fc4' );
 define(
 	'NG_WW_LATLON',
 	array(
-		'lat' => 37.247494,
-		'lon' => 144.4552171,
+		'lat' => -37.2227237,
+		'lon' => 144.1772286,
 	)
 );
 define( 'NG_WW_API_FOR', 'https://api.openweathermap.org/data/2.5/forecast' );
@@ -29,7 +29,7 @@ $params = array(
 	'lat'   => NG_WW_LATLON['lat'],
 	'lon'   => NG_WW_LATLON['lon'],
 	'appid' => NG_WW_API,
-	'cnt'   => 6,
+	'cnt'   => 48,
 	'mode'  => 'json',
 	'units' => 'metric',
 	'lang'  => 'en',
@@ -52,4 +52,93 @@ if ( strtotime( '+1 hour', $last ) < $time ) {
 	file_put_contents( NG_WW_PATH . "/ww-data_wea-$code-$time.json", $body );
 
 	update_option( 'ng_ww_time', $time );
+}
+
+
+function ng_ww_scripts() {
+	wp_register_style( 'ng_ww', NG_WW_URI . 'ww.css' );
+}
+add_action( 'wp_enqueue_scripts', 'ng_ww_scripts' );
+
+
+add_shortcode( 'ww', 'ng_shortcode_ww' );
+
+function ng_shortcode_ww( $attrs = array() ) {
+
+	$content = '';
+
+	$content .= sprintf( '<img src="%s" class="mock"/>', NG_WW_URI . 'mock.png' );
+
+	$last_data = get_option( 'ng_ww_time' );
+	$data      = file_get_contents( NG_WW_PATH . "/ww-data_for-200-$last_data.json" );
+	$data      = json_decode( $data );
+	if ( ! $data ) {
+		return;
+	}
+
+	$days = array();
+	foreach ( $data->list as $day ) {
+		$days[ date( 'Y-m-d', $day->dt ) ][] = $day;
+	}
+
+	wp_enqueue_style( 'ng_ww' );
+
+	date_default_timezone_set( wp_timezone_string() );
+
+	$content .= sprintf( '<ul class="weather-widget-list">' );
+
+	$content .= sprintf( '<h4 class="time">%s</h4>', date( 'M d, H:ia' ) );
+
+	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
+
+	foreach ( $days as $key => $day ) :
+		if ( $key === date( 'Y-m-d' ) ) {
+			ob_start();
+			include NG_WW_PATH . '/parts/current.php';
+			$content .= ob_get_clean();
+		}
+
+		ob_start();
+		include NG_WW_PATH . '/parts/day.php';
+		$content .= ob_get_clean();
+
+	endforeach;
+
+	$content .= sprintf( '</ul>' );
+
+	return $content;
+}
+
+
+function compass_direction( $deg = 0 ) {
+	$dir = 'N';
+
+	$list = array(
+		'N'   => '0 - 11.25',
+		'NNE' => '11.25 - 33.75',
+		'NE'  => '33.75 - 56.25',
+		'ENE' => '56.25 - 78.75',
+		'E'   => '78.75 - 101.25',
+		'ESE' => '101.25 - 123.75',
+		'SE'  => '123.75 - 146.25',
+		'SSE' => '146.25 - 168.75',
+		'S'   => '168.75 - 191.25',
+		'SSW' => '191.25 - 213.75',
+		'SW'  => '213.75 - 236.25',
+		'WSW' => '236.25 - 258.75',
+		'W'   => '258.75 - 281.25',
+		'WNW' => '281.25 - 303.75',
+		'NW'  => '303.75 - 326.25',
+		'NNW' => '326.25 - 348.75',
+		'N'   => '348.75 - 360',
+	);
+
+	foreach ( $list as $k => $v ) {
+		$range = explode( ' - ', $v );
+		if ( $deg == $range[0] || $deg > $range[0] ) {
+			$dir = $k;
+		}
+	}
+
+	return $dir;
 }
