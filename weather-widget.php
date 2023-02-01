@@ -39,17 +39,19 @@ $params = array(
 $last = get_option( 'ng_ww_time' );
 $time = time();
 if ( strtotime( '+1 hour', $last ) < $time ) {
-	$url  = add_query_arg( $params, NG_WW_API_FOR );
-	$resp = wp_remote_get( $url );
-	$body = wp_remote_retrieve_body( $resp );
-	$code = $resp['response']['code'];
-	file_put_contents( NG_WW_PATH . "/ww-data_for-$code-$time.json", $body );
+	// $url  = add_query_arg( $params, NG_WW_API_FOR );
+	// $resp = wp_remote_get( $url );
+	// $body = wp_remote_retrieve_body( $resp );
+	// $code = $resp['response']['code'];
+	// file_put_contents( NG_WW_PATH . "/ww-data_for-$code-$time.json", $body );
 
-	$url  = add_query_arg( $params, NG_WW_API_WEA );
-	$resp = wp_remote_get( $url );
-	$body = wp_remote_retrieve_body( $resp );
-	$code = $resp['response']['code'];
-	file_put_contents( NG_WW_PATH . "/ww-data_wea-$code-$time.json", $body );
+	// $url  = add_query_arg( $params, NG_WW_API_WEA );
+	// $resp = wp_remote_get( $url );
+	// $body = wp_remote_retrieve_body( $resp );
+	// $code = $resp['response']['code'];
+	// file_put_contents( NG_WW_PATH . "/ww-data_wea-$code-$time.json", $body );
+
+    ng_ww_tomorrow_api();
 
 	update_option( 'ng_ww_time', $time );
 }
@@ -84,7 +86,7 @@ function ng_shortcode_ww( $attrs = array() ) {
 	date_default_timezone_set( wp_timezone_string() );
 
 	$content .= sprintf( '<ul class="weather-widget-list">' );
-	$content .= sprintf( '<h4 class="time">%s</h4>', date( 'M d, H:ia' ) );
+	$content .= sprintf( '<h4 class="time">%s</h4>', date( 'M d, h:ia' ) );
 	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
 
 	foreach ( $days as $key => $day ) :
@@ -142,18 +144,77 @@ function compass_direction( $deg = 0 ) {
 function ng_ww_tomorrow_api() {
 	require_once 'vendor/autoload.php';
 
-	$client = new \GuzzleHttp\Client();
+	$client = new GuzzleHttp\Client();
 
-	$response = $client->request(
-		'GET',
-		'https://api.tomorrow.io/v4/timelines?location=-37.2227237%2C%20144.1772286&fields=temperature&fields=temperatureApparent&fields=dewPoint&fields=humidity&fields=windSpeed&fields=windDirection&fields=pressureSurfaceLevel&fields=sunriseTime&fields=sunsetTime&fields=visibility&fields=weatherCodeFullDay&units=metric&timesteps=1d&startTime=now&endTime=nowPlus6d&timezone=Australia%2FCanberra&apikey=2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie',
-		array(
-			'headers' => array(
-				'Accept-Encoding' => 'gzip',
-				'accept'          => 'application/json',
-			),
-		)
-	);
+    $fields = [
+        'temperature',
+        'temperatureApparent',
+        'dewPoint',
+        'humidity',
+        'windSpeed',
+        'windDirection',
+        'pressureSurfaceLevel',
+        'sunriseTime',
+        'sunsetTime',
+        'visibility',
+        'weatherCodeFullDay',
+    ];
 
-	echo $response->getBody();
+    $body = [
+        'location' => sprintf("%s, %s", NG_WW_LATLON['lat'], NG_WW_LATLON['lon']),
+        'fields' => $fields,
+        'units' => 'metric',
+        'timesteps' => ['1d'],
+        "startTime" => "now",
+        "endTime" => "nowPlus6d",
+        "timezone" => "Australia/Melbourne"
+    ];
+
+    // Simple request
+	// $response = $client->request(
+	// 	'GET',
+	// 	'https://api.tomorrow.io/v4/timelines?location=-37.2227237%2C%20144.1772286&fields=temperature&fields=temperatureApparent&fields=dewPoint&fields=humidity&fields=windSpeed&fields=windDirection&fields=pressureSurfaceLevel&fields=sunriseTime&fields=sunsetTime&fields=visibility&fields=weatherCodeFullDay&units=metric&timesteps=1d&startTime=now&endTime=nowPlus6d&timezone=Australia%2FCanberra&apikey=2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie',
+	// 	array(
+	// 		'headers' => array(
+	// 			'Accept-Encoding' => 'gzip',
+	// 			'accept'          => 'application/json',
+	// 		),
+	// 	)
+	// );
+
+    // Advanced request
+    $response = $client->request('POST', 'https://api.tomorrow.io/v4/timelines?apikey=2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie', [
+        'body' => json_encode($body),
+        'headers' => [
+          'Accept-Encoding' => 'gzip',
+          'accept' => 'application/json',
+          'content-type' => 'application/json',
+        ],
+    ]);
+
+    update_option( 'ng_ww_week', $response->getBody() );
+}
+
+function ng_ww_get_week_data() {
+
+}
+
+function ng_ww_get_today_data() {
+    
+}
+
+register_activation_hook(__FILE__, 'ng_ww_activate');
+function ng_ww_activate() {
+    if ( ! wp_next_scheduled('ng_ww_get_week_data')) {
+        wp_schedule_event(time(), 'hourly', 'ng_ww_get_week_data');
+    }
+    if ( ! wp_next_scheduled('ng_ww_get_today_data')) {
+        wp_schedule_event(time(), 'hourly', 'ng_ww_get_today_data');
+    }
+}
+
+register_deactivation_hook(__FILE__, 'ng_ww_deactivate');
+function ng_ww_deactivate() {
+    wp_clear_scheduled_hook('ng_ww_get_week_data');
+    wp_clear_scheduled_hook('ng_ww_get_today_data');
 }

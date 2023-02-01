@@ -1,0 +1,26 @@
+{
+    "name": "greengraphics/weather-widget",
+    "autoload": {
+        "psr-4": {
+            "Greengraphics\\WeatherWidget\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nathan Gearing",
+            "email": "natgearing@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "7.4.3",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "config": {
+
+        "platform": {
+      
+          "php": "7.4.3"
+      
+        }  
+    }
+}
