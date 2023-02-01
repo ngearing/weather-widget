@@ -1,7 +1,7 @@
 <?php
-$current_forcast = $day[0];
-$classes         = array( 'current' );
-$conditions      = implode( '. ', array_column( $current_forcast->weather, 'description' ) );
+$current_forecast = $day[0];
+$classes          = array( 'current' );
+$conditions       = implode( '. ', array_column( $current_forecast->weather, 'description' ) );
 ?>
 <li class="<?php echo implode( ' ', $classes ); ?>">
 
@@ -10,8 +10,8 @@ $conditions      = implode( '. ', array_column( $current_forcast->weather, 'desc
 		printf(
 			"<img src='%s'/>
             %d<span class='icon-c'>°C</span>",
-			"http://openweathermap.org/img/wn/{$current_forcast->weather[0]->icon}@2x.png",
-			$current_forcast->main->temp
+			"http://openweathermap.org/img/wn/{$current_forecast->weather[0]->icon}@2x.png",
+			$current_forecast->main->temp
 		);
 		?>
 	</h4>
@@ -19,7 +19,7 @@ $conditions      = implode( '. ', array_column( $current_forcast->weather, 'desc
 		<?php
 		printf(
 			'Feels like %d<span class="icon-c">°C</span>. %s',
-			$current_forcast->main->feels_like,
+			$current_forecast->main->feels_like,
 			$conditions
 		);
 		?>
@@ -28,33 +28,33 @@ $conditions      = implode( '. ', array_column( $current_forcast->weather, 'desc
 	<p class="params">
 		<?php
 		$params               = array();
-		$params['rain']       = $current_forcast->rain ?
+		$params['rain']       = $current_forecast->rain ?
 			sprintf(
 				'%s %smm',
 				file_get_contents( NG_WW_PATH . 'assets/icon-rain.svg' ),
-				$current_forcast->rain->{'3h'}
+				$current_forecast->rain->{'3h'}
 			) : '';
-		$params['snow']       = $current_forcast->snow ?
+		$params['snow']       = $current_forecast->snow ?
 			sprintf(
 				'%s %smm',
 				file_get_contents( NG_WW_PATH . 'assets/icon-snow.svg' ),
-				$current_forcast->snow->{'3h'}
+				$current_forecast->snow->{'3h'}
 			) : '';
-		$params['wind']       = $current_forcast->wind ?
+		$params['wind']       = $current_forecast->wind ?
 			sprintf(
 				'%s %sm/s %s',
-				str_replace( '180deg', $current_forcast->wind->deg . 'deg', file_get_contents( NG_WW_PATH . 'assets/icon-wind.svg' ) ),
-				$current_forcast->wind->speed,
-				compass_direction( $current_forcast->wind->deg )
+				str_replace( '180deg', $current_forecast->wind->deg . 'deg', file_get_contents( NG_WW_PATH . 'assets/icon-wind.svg' ) ),
+				$current_forecast->wind->speed,
+				compass_direction( $current_forecast->wind->deg )
 			) : '';
-		$params['pressure']   = $current_forcast->main->pressure ?
+		$params['pressure']   = $current_forecast->main->pressure ?
 			sprintf(
 				'%s %shPa',
 				file_get_contents( NG_WW_PATH . 'assets/icon-pressure.svg' ),
-				$current_forcast->main->pressure
+				$current_forecast->main->pressure
 			) : '';
-		$params['humidity']   = $current_forcast->main->humidity ? 'Humidity: ' . $current_forcast->main->humidity . '%' : '';
-		$params['visibility'] = $current_forcast->visibility ? 'Visibility: ' . $current_forcast->visibility / 1000 . 'km' : '';
+		$params['humidity']   = $current_forecast->main->humidity ? 'Humidity: ' . $current_forecast->main->humidity . '%' : '';
+		$params['visibility'] = $current_forecast->visibility ? 'Visibility: ' . $current_forecast->visibility / 1000 . 'km' : '';
 		echo '<span>' . implode( '</span><span>', array_filter( $params ) ) . '</span>';
 		?>
 	</p>

@@ -138,3 +138,22 @@ function compass_direction( $deg = 0 ) {
 
 	return $dir;
 }
+
+function ng_ww_tomorrow_api() {
+	require_once 'vendor/autoload.php';
+
+	$client = new \GuzzleHttp\Client();
+
+	$response = $client->request(
+		'GET',
+		'https://api.tomorrow.io/v4/timelines?location=-37.2227237%2C%20144.1772286&fields=temperature&fields=temperatureApparent&fields=dewPoint&fields=humidity&fields=windSpeed&fields=windDirection&fields=pressureSurfaceLevel&fields=sunriseTime&fields=sunsetTime&fields=visibility&fields=weatherCodeFullDay&units=metric&timesteps=1d&startTime=now&endTime=nowPlus6d&timezone=Australia%2FCanberra&apikey=2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie',
+		array(
+			'headers' => array(
+				'Accept-Encoding' => 'gzip',
+				'accept'          => 'application/json',
+			),
+		)
+	);
+
+	echo $response->getBody();
+}
