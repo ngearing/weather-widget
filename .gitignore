@@ -1,2 +1,5 @@
 ww-data*.json
 /vendor/
+node_modules
+package-lock.json
+.browser-sync.json

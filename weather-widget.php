@@ -92,17 +92,13 @@ add_action( 'wp_enqueue_scripts', 'ng_ww_scripts' );
 add_shortcode( 'ww', 'ng_shortcode_ww' );
 function ng_shortcode_ww( $attrs = array() ) {
 
+	require_once __DIR__ . '/lib/WeatherCodes.php';
+	require_once __DIR__ . '/lib/WeatherIcons.php';
+
 	$content = '';
 
-	$data = false;
-	if ( ! $data ) {
-		return;
-	}
+	$options = new Options();
 
-	$days = array();
-	foreach ( $data->list as $day ) {
-		$days[ date( 'Y-m-d', $day->dt ) ][] = $day;
-	}
 
 	wp_enqueue_style( 'ng_ww' );
 
@@ -112,18 +108,21 @@ function ng_shortcode_ww( $attrs = array() ) {
 	$content .= sprintf( '<h4 class="time">%s</h4>', date( 'M d, h:ia' ) );
 	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
 
-	foreach ( $days as $key => $day ) :
-		if ( $key === date( 'Y-m-d' ) ) {
-			ob_start();
-			include NG_WW_PATH . '/parts/current.php';
-			$content .= ob_get_clean();
-		}
-
+	// Today forecast
+	$data = $options->get('data_today');
+	if ( $data ) {
 		ob_start();
-		include NG_WW_PATH . '/parts/day.php';
+		include NG_WW_PATH . '/parts/today.php';
 		$content .= ob_get_clean();
+	}
 
-	endforeach;
+	// Week forecast
+	$data = $options->get('data');
+	if ( $data ) {
+		ob_start();
+		include NG_WW_PATH . '/parts/week.php';
+		$content .= ob_get_clean();
+	}
 
 	$content .= sprintf( '</ul>' );
 
@@ -181,6 +180,14 @@ class Options {
 		}
 		update_option( $this::OPTIONS_PRE . $key, $value );
 	}
+
+	function get($key = null) {
+		if ( ! $key ) {
+			$key = $this::OPTIONS_KEY;
+		}
+
+		return get_option($this::OPTIONS_PRE . $key);
+	}
 }
 
 
@@ -198,7 +205,7 @@ class API {
 	}
 
 	function get($when = '') {
-
+		// TODO: Combine query into 1?
 		$fields = [
 			'temperatureMin',
 			'temperatureMax',
@@ -213,12 +220,14 @@ class API {
 			$fields = [
 				'temperature',
 				'temperatureApparent',
-				'dewPoint',
-				'humidity',
+				'rainIntensity',
+				'snowIntensity',
 				'windSpeed',
 				'windDirection',
 				'pressureSurfaceLevel',
+				'humidity',
 				'visibility',
+				'dewPoint',
 				'weatherCode',
 			];
 			$end = 'nowPlus1h';

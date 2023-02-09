@@ -4,6 +4,9 @@
     color: var(--weather-text);
     list-style-type: none;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 1rem;
+    max-width: 460px;
+    width: 490px;
 }
 
 .weather-widget-list .time {
@@ -22,18 +25,20 @@
     margin: 0;
 }
 
-.weather-widget-list li:not(.current) {
+.weather-widget-list li:not(.today) {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 8px;
 }
 
 .weather-widget-list .date {
-    width: 30%;
+    /* width: 30%; */
+    flex: 1 150px;
 }
 
 .weather-widget-list .temp {
-    width: 30%;
+    flex: 1 200px;
     margin: 0;
     display: flex;
     align-items: center;
@@ -42,12 +47,17 @@
 }
 
 .weather-widget-list .temp img {
-    width: 58px;
+    width: 28px;
+    margin-right: 8px;
 }
 
-.weather-widget-list li.current .temp {
+.weather-widget-list li.today .temp {
     font-weight: 500;
     font-size: 58px;
+}
+
+.weather-widget-list .today img {
+    width: 64px;
 }
 
 .weather-widget-list .params {
@@ -78,6 +88,7 @@
 
 .weather-widget-list .conditions {
     opacity: 0.65;
+    flex: 1 100px;
 }
 
 .weather-widget-list .feels {
