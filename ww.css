@@ -33,7 +33,6 @@
 }
 
 .weather-widget-list .date {
-    /* width: 30%; */
     flex: 1 150px;
 }
 
@@ -63,11 +62,10 @@
 .weather-widget-list .params {
     padding-left: 1rem;
     border-left: 1.5px solid var(--weather-color);
-    display: flex;
     line-height: 1;
-    flex-flow: wrap;
-    align-items: center;
-    gap: 4px 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 8px;
 }
 
 .weather-widget-list .params span {

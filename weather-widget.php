@@ -40,7 +40,6 @@ function ng_ww_get_today_data() {
 	$api->get('today');
 }
 
-
 define( 'NG_WW_API', 'eaad7c88ca3be3e5552347b4bee21fc4' );
 define(
 	'NG_WW_LATLON',
@@ -51,37 +50,6 @@ define(
 );
 define( 'NG_WW_API_FOR', 'https://api.openweathermap.org/data/2.5/forecast' );
 define( 'NG_WW_API_WEA', 'https://api.openweathermap.org/data/2.5/weather' );
-
-// $params = array(
-// 	'lat'   => NG_WW_LATLON['lat'],
-// 	'lon'   => NG_WW_LATLON['lon'],
-// 	'appid' => NG_WW_API,
-// 	'cnt'   => 48,
-// 	'mode'  => 'json',
-// 	'units' => 'metric',
-// 	'lang'  => 'en',
-// );
-
-// // Check every hour.
-// $last = get_option( 'ng_ww_time' );
-// $time = time();
-// if ( strtotime( '+1 hour', $last ) < $time ) {
-// 	// $url  = add_query_arg( $params, NG_WW_API_FOR );
-// 	// $resp = wp_remote_get( $url );
-// 	// $body = wp_remote_retrieve_body( $resp );
-// 	// $code = $resp['response']['code'];
-// 	// file_put_contents( NG_WW_PATH . "/ww-data_for-$code-$time.json", $body );
-
-// 	// $url  = add_query_arg( $params, NG_WW_API_WEA );
-// 	// $resp = wp_remote_get( $url );
-// 	// $body = wp_remote_retrieve_body( $resp );
-// 	// $code = $resp['response']['code'];
-// 	// file_put_contents( NG_WW_PATH . "/ww-data_wea-$code-$time.json", $body );
-
-//     ng_ww_tomorrow_api();
-
-// 	update_option( 'ng_ww_time', $time );
-// }
 
 function ng_ww_scripts() {
 	wp_register_style( 'ng_ww', NG_WW_URI . 'ww.css' );
@@ -109,7 +77,11 @@ function ng_shortcode_ww( $attrs = array() ) {
 	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
 
 	// Today forecast
-	$data = $options->get('data_today');
+	$data = json_decode( $options->get('data_today') );
+	// Run import if no data or data old.
+	if ( ! $data ) {
+		// TODO: Add check here for old data.
+	}
 	if ( $data ) {
 		ob_start();
 		include NG_WW_PATH . '/parts/today.php';
@@ -117,7 +89,12 @@ function ng_shortcode_ww( $attrs = array() ) {
 	}
 
 	// Week forecast
-	$data = $options->get('data');
+	$data = json_decode( $options->get('data') );
+	// Run import if no data or data old.
+	if ( ! $data ) {
+		$data = (new API())->get('week');
+		// TODO: Add check here for old data.
+	}
 	if ( $data ) {
 		ob_start();
 		include NG_WW_PATH . '/parts/week.php';
@@ -273,5 +250,7 @@ class API {
 		} else {
 			$options->set('data', $response->getBody()->getContents() );
 		}
+
+		return $response->getBody()->getContents();
 	}
 }

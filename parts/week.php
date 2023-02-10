@@ -19,7 +19,7 @@
 // $conditions = implode( '. ', array_column( $day_forcast->weather, 'description' ) );
 $codes = new WeatherCodes();
 $icons = new WeatherIcons();
-$week = json_decode($data);
+$week = $data;
 
 foreach( $week->data->timelines[0]->intervals as $day ) :
 ?>

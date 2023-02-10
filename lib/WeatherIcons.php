@@ -46,4 +46,10 @@ class WeatherIcons {
             $size
         );    
     }
+
+    function getSVG($name) {
+        $file = file_get_contents(NG_WW_PATH . "assets/images/svg/$name.svg");
+
+        return "<span class='icon'>$file</span>";
+    }
 }
