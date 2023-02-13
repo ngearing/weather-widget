@@ -1,8 +1,12 @@
 {
     "name": "greengraphics/weather-widget",
     "autoload": {
+        "files": [
+            "inc/functions.php",
+            "inc/shortcodes.php"
+        ],
         "psr-4": {
-            "Greengraphics\\WeatherWidget\\": "src/"
+            "WeatherWidget\\": "lib/"
         }
     },
     "authors": [
@@ -16,11 +20,8 @@
         "guzzlehttp/guzzle": "^7.5"
     },
     "config": {
-
         "platform": {
-      
-          "php": "7.4.3"
-      
-        }  
+            "php": "7.4.3"
+        }
     }
 }
