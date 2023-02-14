@@ -2,8 +2,13 @@
 
 /**
  * Plugin Name: Weather Widget
+ * Plugin URI: https://bitbucket.org/ngearing/weather-widget/
  * Author: Nathan
+ * Description: A weather widget.
  * Version: 0.0.1
+ *
+ * Update URI: https://bitbucket.org/ngearing/weather-widget/
+ * download_url: https://bitbucket.org/ngearing/weather-widget/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,12 +38,12 @@ function ng_ww_deactivate() {
 }
 
 function ng_ww_get_week_data() {
-	$api = new API();
+	$api = new \WeatherWidget\API();
 	$api->get( 'week' );
 }
 
 function ng_ww_get_today_data() {
-	$api = new API();
+	$api = new \WeatherWidget\API();
 	$api->get( 'today' );
 }
 
@@ -57,3 +62,13 @@ function ng_ww_scripts() {
 	wp_register_style( 'ng_ww', NG_WW_URI . 'ww.css' );
 }
 add_action( 'wp_enqueue_scripts', 'ng_ww_scripts' );
+
+
+// Plugin updates
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://bitbucket.org/ngearing/weather-widget/',
+	__FILE__,
+	'weather-widget'
+);
