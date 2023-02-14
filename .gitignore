@@ -1,5 +1,4 @@
-ww-data*.json
-/vendor/
 node_modules
 package-lock.json
+composer.lock
 .browser-sync.json

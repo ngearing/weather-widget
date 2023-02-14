@@ -5,7 +5,7 @@
  * Plugin URI: https://bitbucket.org/ngearing/weather-widget/
  * Author: Nathan
  * Description: A weather widget.
- * Version: 0.0.1
+ * Version: 0.0.2
  *
  * Update URI: https://bitbucket.org/ngearing/weather-widget/
  * download_url: https://bitbucket.org/ngearing/weather-widget/
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-define( 'NG_WW_VERSION', '0.0.1' );
+define( 'NG_WW_VERSION', '0.0.2' );
 define( 'NG_WW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'NG_WW_URI', plugin_dir_url( __FILE__ ) );
 
