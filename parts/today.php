@@ -49,13 +49,16 @@ $icons   = new Icons();
 				return sprintf( '%s %shPa', $icons->getSVG( 'pressure' ), $v );
 			},
 			'humidity'             => function( $v ) {
-				return sprintf( 'Humidity: %s', $v );
+				return sprintf( 'Humidity: %s%%', $v );
 			},
 			'visibility'           => function( $v ) {
 				return sprintf( 'Visibility: %skm', $v );
 			},
 			'dewPoint'             => function( $v ) {
-				return sprintf( 'Dewpoint: %s°C', $v );
+				return sprintf( 'Dew Point: %s°C', $v );
+			},
+			'uvIndex'              => function( $v ) {
+				return sprintf( 'UV: %s', $v );
 			},
 		);
 

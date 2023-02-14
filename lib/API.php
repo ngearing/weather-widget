@@ -39,6 +39,7 @@ class API {
 				'humidity',
 				'visibility',
 				'dewPoint',
+				'uvIndex',
 				'weatherCode',
 			);
 			$end    = 'nowPlus1h';
