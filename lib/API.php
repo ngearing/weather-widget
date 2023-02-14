@@ -9,7 +9,6 @@ class API {
 	var $client  = null;
 
 	function __construct() {
-		require_once 'vendor/autoload.php';
 		$this->client  = new \GuzzleHttp\Client();
 		$this->api_key = '2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie';
 		$this->api_url = 'https://api.tomorrow.io/v4/timelines';
@@ -82,8 +81,10 @@ class API {
 		$options = new Options();
 		if ( $when == 'today' ) {
 			$options->set( 'data_today', $response->getBody()->getContents() );
+			$options->set( 'last_checked_today', time() );
 		} else {
 			$options->set( 'data', $response->getBody()->getContents() );
+			$options->set( 'last_checked', time() );
 		}
 
 		return $response->getBody()->getContents();

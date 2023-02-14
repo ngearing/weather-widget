@@ -19,11 +19,12 @@ function ng_shortcode_ww( $attrs = array() ) {
 	$content .= sprintf( '<h3 class="location">%s</h3>', 'Kyneton, AU' );
 
 	// Today forecast
-	$data = json_decode( $options->get( 'data_today' ) );
+	$data         = json_decode( $options->get( 'data_today' ) );
+	$last_checked = $options->get( 'last_checked_today' );
+
 	// Run import if no data or data old.
-	if ( ! $data ) {
+	if ( ! $data || time() > strtotime( '+1 hour', $last_checked ) ) {
 		$data = ( new API() )->get( 'today' );
-		// TODO: Add check here for old data.
 	}
 	if ( $data ) {
 		ob_start();
@@ -32,11 +33,12 @@ function ng_shortcode_ww( $attrs = array() ) {
 	}
 
 	// Week forecast
-	$data = json_decode( $options->get( 'data' ) );
+	$data         = json_decode( $options->get( 'data' ) );
+	$last_checked = $options->get( 'last_checked' );
+
 	// Run import if no data or data old.
-	if ( ! $data ) {
+	if ( ! $data || time() > strtotime( '+1 hour', $last_checked ) ) {
 		$data = ( new API() )->get( 'week' );
-		// TODO: Add check here for old data.
 	}
 	if ( $data ) {
 		ob_start();
