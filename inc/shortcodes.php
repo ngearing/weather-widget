@@ -25,6 +25,7 @@ function ng_shortcode_ww( $attrs = array() ) {
 	// Run import if no data or data old.
 	if ( ! $data || time() > strtotime( '+1 hour', $last_checked ) ) {
 		$data = ( new API() )->get( 'today' );
+		$data = json_decode( $data );
 	}
 	if ( $data ) {
 		ob_start();
@@ -39,6 +40,7 @@ function ng_shortcode_ww( $attrs = array() ) {
 	// Run import if no data or data old.
 	if ( ! $data || time() > strtotime( '+1 hour', $last_checked ) ) {
 		$data = ( new API() )->get( 'week' );
+		$data = json_decode( $data );
 	}
 	if ( $data ) {
 		ob_start();

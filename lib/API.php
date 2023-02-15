@@ -75,7 +75,8 @@ class API {
 		} catch ( \Exception $e ) {
 			$response             = $e->getResponse();
 			$responseBodyAsString = $response->getBody()->getContents();
-			echo $responseBodyAsString;
+			error_log($responseBodyAsString);
+			return false;
 		}
 
 		$options = new Options();
