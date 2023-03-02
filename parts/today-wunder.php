@@ -11,22 +11,21 @@ $values->humidity = $today->humidity;
 $values->uv       = $today->uv;
 $codes            = new Codes();
 $icons            = new Icons();
+
 ?>
 <li class="<?php echo implode( ' ', $classes ); ?>">
 
 	<?php
 	printf(
 		'<h4 class="temp">
-			<img src="%s"/>
 			%d<span class="icon-c">°C</span>
 		</h4>',
-		$icons->get( $values->weatherCode, true, 'large' ),
 		$values->temp
 	);
 
 	printf(
 		'<p class="feels">Feels like %d<span class="icon-c">°C</span>. %s</p>',
-		$values->temperatureApparent,
+		$values->heatIndex,
 		$codes->get( $values->weatherCode )
 	);
 
@@ -42,9 +41,10 @@ $icons            = new Icons();
 			},
 			'windSpeed'  => function( $v, $values ) use ( $icons ) {
 				return sprintf(
-					'%s %sm/s %s',
+					'%s %01.1f / %01.1f knots %s',
 					str_replace( '180deg', $values->winddir . 'deg', $icons->getSVG( 'wind' ) ),
-					$v,
+					$v / 1.852, // kph to knots
+					$values->windGust / 1.852, //kph to knots
 					compass_direction( $values->winddir )
 				);
 			},
@@ -58,7 +58,7 @@ $icons            = new Icons();
 				return sprintf( 'Visibility: %skm', $v );
 			},
 			'dewpt'      => function( $v ) {
-				return sprintf( 'Dew Point: %s°C', $v );
+				return sprintf( 'Dew Point: %d°C', $v );
 			},
 			'uv'         => function( $v ) {
 				return sprintf( 'UV: %s', $v );

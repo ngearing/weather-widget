@@ -101,3 +101,23 @@
     font-weight: bold;
     text-transform: capitalize;
 }
+
+.weather-widget-list.bar .params {
+    display: flex;
+    flex-flow: nowrap;
+    padding: 1rem;
+    border-width: thin 0;
+    border-style: solid;
+    border-color: var(--weather-color);
+    overflow-x: auto;
+    gap: 18px;
+}
+
+.weather-widget-list.bar .params .temp {
+    font-weight: bold;
+}
+
+.weather-widget-list.bar .params > span {
+    flex: 0 0 auto;
+    font-size: 14px;
+}

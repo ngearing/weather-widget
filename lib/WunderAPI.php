@@ -16,7 +16,7 @@ class WunderAPI extends API {
 		$this->api_url   = 'https://api.weather.com/v2/pws/observations/current';
 	}
 
-	function get() {
+	function get( $when = '' ) {
 		$request_url = "$this->api_url?stationId=$this->stationID&format=json&units=m&apiKey=$this->api_key";
 
 		try {

@@ -4,6 +4,23 @@ use WeatherWidget\Options;
 use WeatherWidget\API;
 use WeatherWidget\WunderAPI;
 
+
+add_shortcode('ww_bar', 'ng_shortcode_ww_bar');
+function ng_shortcode_ww_bar() {
+	$content = '';
+
+	$options = new Options();
+	$data = ( new WunderAPI() )->get();
+	if ( $data ) {
+		ob_start();
+		include NG_WW_PATH . '/parts/bar.php';
+		$content .= ob_get_clean();
+	}
+
+	return $content;
+}
+
+
 add_shortcode( 'ww', 'ng_shortcode_ww' );
 function ng_shortcode_ww( $attrs = array() ) {
 
