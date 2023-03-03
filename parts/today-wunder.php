@@ -42,9 +42,9 @@ $icons            = new Icons();
 			'windSpeed'  => function( $v, $values ) use ( $icons ) {
 				return sprintf(
 					'%s %01.1f / %01.1f knots %s',
-					str_replace( '180deg', ( $values->winddir + 180 ) . 'deg', $icons->getSVG( 'wind' ) ),
-					$v / 1.852, // kph to knots.
-					$values->windGust / 1.852, // kph to knots.
+					str_replace( '180deg', ($values->winddir + 180) . 'deg', $icons->getSVG( 'wind' ) ),
+					$v / 1.852, // kph to knots
+					$values->windGust / 1.852, //kph to knots
 					compass_direction( $values->winddir )
 				);
 			},

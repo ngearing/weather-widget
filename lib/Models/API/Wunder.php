@@ -1,8 +1,8 @@
 <?php
 
-namespace WeatherWidget;
+namespace WeatherWidget\Models\API;
 
-class WunderAPI extends API {
+class Wunder {
 
 	var $stationID = '';
 	var $api_key   = '';

@@ -1,8 +1,8 @@
 <?php
 
-namespace WeatherWidget;
+namespace WeatherWidget\Models\API;
 
-class API {
+class Tomorrow {
 
 	var $api_key = '';
 	var $api_url = '';
