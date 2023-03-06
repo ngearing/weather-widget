@@ -42,14 +42,14 @@ $icons            = new Icons();
 			'windSpeed'  => function( $v, $values ) use ( $icons ) {
 				return sprintf(
 					'%s %01.1f / %01.1f knots %s',
-					str_replace( '180deg', $values->winddir . 'deg', $icons->getSVG( 'wind' ) ),
-					$v / 1.852, // kph to knots
-					$values->windGust / 1.852, //kph to knots
+					str_replace( '180deg', ( $values->winddir + 180 ) . 'deg', $icons->getSVG( 'wind' ) ),
+					$v / 1.852, // kph to knots.
+					$values->windGust / 1.852, // kph to knots.
 					compass_direction( $values->winddir )
 				);
 			},
 			'pressure'   => function( $v ) use ( $icons ) {
-				return sprintf( '%s %shPa', $icons->getSVG( 'pressure' ), $v );
+				return sprintf( '%s %dhPa', $icons->getSVG( 'pressure' ), $v );
 			},
 			'humidity'   => function( $v ) {
 				return sprintf( 'Humidity: %s%%', $v );
