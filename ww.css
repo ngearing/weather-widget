@@ -5,6 +5,7 @@
     list-style-type: none;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     padding: 1rem;
+    margin: 2rem auto;
     text-align: center;
 }
 
@@ -77,14 +78,20 @@
     border-width: thin 0;
     border-style: solid;
     border-color: var(--weather-color);
-    max-width: 60%;
     margin-inline: auto;
+}
+
+@media (min-width: 660px) {
+    .weather-widget-list .params {
+        max-width: 460px;
+        width: 80%;
+    }
 }
 
 .weather-widget-list .params span {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 
 .weather-widget-list .params svg {
@@ -107,11 +114,16 @@
     text-transform: capitalize;
 }
 
+.weather-widget-list.bar {
+    padding: 0;
+}
+
 .weather-widget-list.bar .params {
     flex-flow: nowrap;
     overflow-x: auto;
     justify-content: flex-start;
     max-width: none;
+    width: 100%;
 }
 
 @media (min-width: 660px) {
