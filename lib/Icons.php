@@ -30,8 +30,10 @@ class Icons {
 		8000 => 'tstorm',
 	);
 
-	function __construct() {
+	var $plugin = null;
 
+	function __construct($plugin) {
+		$this->plugin = $plugin;
 	}
 
 	function get( $code = '1000', $day = true, $size = 'small' ) {
@@ -39,7 +41,7 @@ class Icons {
 
 		return sprintf(
 			'%sassets/images/%s/%s%s_%s_%s.png',
-			NG_WW_URI,
+			$this->plugin['url'],
 			$size,
 			$code,
 			$day ? '0' : '1',
@@ -49,7 +51,7 @@ class Icons {
 	}
 
 	function getSVG( $name ) {
-		$file = file_get_contents( NG_WW_PATH . "assets/images/svg/$name.svg" );
+		$file = file_get_contents( $this->plugin->dir . "/assets/images/svg/$name.svg" );
 
 		return "<span class='icon'>$file</span>";
 	}

@@ -11,15 +11,19 @@ class Plugin {
 
     var $plugin = null;
     var $updater = null;
+    var $options = null;
     var $apis = null;
+    var $icons = null;
+    var $codes = null;
     var $views = null;
     var $shortcodes = null;
 
     function __construct($file) {
-        $this->plugin = get_file_data($file, ['Plugin Name','Version']);
+        $this->plugin = get_file_data($file, ['Plugin Name'=>'name','Version'=>'version']);
         $this->plugin['file'] = $file;
         $this->plugin['dir'] = dirname($file);
         $this->plugin['url'] = plugins_url('',$file);
+        $this->plugin = (object) $this->plugin;
 
         // Plugin updates
         $this->updater = PucFactory::buildUpdateChecker(
@@ -28,8 +32,11 @@ class Plugin {
             'weather-widget'
         );
 
-        $this->apis = new APIS();
-        $this->views = new Views($this->plugin, $this->apis);
+        $this->options = new Options();
+        $this->apis = new APIS($this->options);
+        $this->icons = new Icons($this->plugin);
+        $this->codes = new Codes();
+        $this->views = new Views($this->plugin, $this->apis, $this->icons);
         $this->shortcodes = new Shortcodes($this->plugin, $this->views);
     }
 
