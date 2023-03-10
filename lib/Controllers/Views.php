@@ -10,6 +10,8 @@ class Views {
     var $apis = null;
     var $icons = null;
 
+    var $data = null;
+
     function __construct($plugin, $apis, $icons) {
         $this->plugin = $plugin;
         $this->apis = $apis;
@@ -27,8 +29,11 @@ class Views {
 
         wp_enqueue_style( 'ww' );
 
-        $data = $this->apis->get();
-        $data = $this->format_data($data);
+        $data = [];
+        if (! $this->data ) {
+            $this->data = $this->format_data( $this->apis->get() );
+        }
+        $data = $this->data;
         $icons = $this->icons;
         if ( $data ) {
             ob_start();

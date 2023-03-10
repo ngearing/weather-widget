@@ -35,18 +35,25 @@ class API {
     function get() {
         date_default_timezone_set( wp_timezone_string() );
 
-        // Check if current data is outdated.
-        $last_checked = $this->options->get('last_checked');
-        if ( strtotime($this->get_formatted_check($this->check), $last_checked) > time() ) {
-            return $this->data;
+        $data = $this->data ?: [];
+
+        foreach( $this->apis as $key => $api ) {
+             // Check if current data is outdated.
+            $last_checked = $this->options->get("last_checked_$key");
+            $api_check = $this->get_formatted_check($api->check);
+            if ( strtotime($api_check, $last_checked) < time() ) {
+                $new_data = [];
+                $new_data = $this->fetch($key);
+                $new_data = $this->filter($new_data);
+                $new_data = $this->format($new_data);
+
+                // Update new data.
+                $data = (object) array_replace((array) $data, (array) $new_data);
+
+                $this->options->set("last_checked_$key", time());
+                $this->set_data($data);
+            }
         }
-
-        $data = $this->fetch();
-        $data = $this->filter();
-        $data = $this->format();
-
-        // $this->options->set('last_checked', time());
-        $this->set_data($data);
 
         return $data;
     }
@@ -70,8 +77,8 @@ class API {
         return $this->options->set('data', json_encode($data));
     }
 
-    function get_formatted_check() {
-        $check = $this->check;
+    function get_formatted_check( $check = false ) {
+        $check = $check ?: $this->check;
         $formats = [
             '5 minutes' => '+5 min',
             'hourly' => '+1 hour'
@@ -80,33 +87,26 @@ class API {
         return $formats[$check];
     }
 
-    function fetch() {
-        $data = [];
-        foreach( $this->apis as $key => $api ) {
-            try {
-                $response = $api->get();
-                $response = $api->get_results();
-                $data[$key] = $response;
-            } catch( \Exception $e) {
-                // DOTO: something with error
-                $data[$key] = false;
-            }
-        }
-
-        $this->data = $data;
-        return $data;
-    }
-    function filter() {
+    function fetch($api) {
         $data = [];
 
-        foreach( $this->data as $api_data ) {
-            $api_data = (array) $api_data;
-            $data = array_merge($data, $api_data);
+        try {
+            $response = $this->apis[$api]->get();
+            $response = $this->apis[$api]->get_results();
+            $data = $response;
+        } catch( \Exception $e) {
+            // DOTO: something with error
+            $data = false;
         }
-        $this->data = (object) $data;
+
         return $data;
     }
-    function format() {
-        return $this->data;
+
+    function filter($data = []) {
+        return $data;
+    }
+
+    function format($data = []) {
+        return $data;
     }
 }
