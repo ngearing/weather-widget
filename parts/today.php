@@ -38,7 +38,7 @@ $values = [
 	<?php
     foreach ( $values as $value ) {
         if ( $data->$value ) {
-            echo "<span class='$value'>" . $data->$value . '</span>';
+            echo $data->$value;
         }
     }    
     ?>

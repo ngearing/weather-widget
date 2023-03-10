@@ -7,6 +7,7 @@
     padding: 1rem;
     margin: 2rem auto;
     text-align: center;
+    width: 100%;
 }
 
 .weather-widget-list .time {
@@ -88,7 +89,7 @@
     }
 }
 
-.weather-widget-list .params span {
+.weather-widget-list .params > span {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -128,7 +129,7 @@
 
 @media (min-width: 660px) {
     .weather-widget-list.bar .params {
-        justify-content: center;
+        justify-content: space-between;
     }
 }
 
