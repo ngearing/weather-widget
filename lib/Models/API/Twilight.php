@@ -4,18 +4,18 @@ namespace WeatherWidget\Models\API;
 
 class Twilight {
 
-	var $api_url   = '';
-	var $client    = null;
-	var $lat    = null;
-	var $lng    = null;
+	var $api_url  = '';
+	var $client   = null;
+	var $lat      = null;
+	var $lng      = null;
 	var $response = null;
-	var $data = null;
+	var $data     = null;
 
-	function __construct($latlng, $options) {
-		$this->client    = new \GuzzleHttp\Client();
-		$this->api_url   = 'https://api.sunrise-sunset.org/json';
-		$this->lat = $latlng['lat'];
-		$this->lng = $latlng['lng'];
+	function __construct( $latlng, $options ) {
+		$this->client  = new \GuzzleHttp\Client( array( 'verify' => false ) );
+		$this->api_url = 'https://api.sunrise-sunset.org/json';
+		$this->lat     = $latlng['lat'];
+		$this->lng     = $latlng['lng'];
 	}
 
 	function get() {
