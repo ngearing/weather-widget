@@ -28,7 +28,7 @@ class Plugin {
         // Plugin updates
         $this->updater = PucFactory::buildUpdateChecker(
             'https://bitbucket.org/ngearing/weather-widget/',
-            __FILE__,
+            $file,
             'weather-widget'
         );
 
