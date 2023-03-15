@@ -1,6 +1,8 @@
 <?php
 $classes = array( 'today' );
 $values  = array(
+	'temp',
+	'heatIndex',
 	'precipRate',
 	'snowRate',
 	'windSpeed',
@@ -30,7 +32,7 @@ if ( ! $data || count( get_object_vars( $data ) ) < ( count( $values ) / 2 ) ) {
 		echo '<span> Error: Not enough data to display this widget. </span>';
 	}
 } else {
-	?>
+?>
 
 <li class="<?php echo implode( ' ', $classes ); ?>">
 
@@ -50,8 +52,12 @@ if ( ! $data || count( get_object_vars( $data ) ) < ( count( $values ) / 2 ) ) {
 	?>
 	<p class="params">
 	<?php
+	$not_show = [
+		'temp',
+		'heatIndex'
+	];
 	foreach ( $values as $value ) {
-		if ( $data->$value ) {
+		if ( $data->$value && ! in_array($value, $not_show) ) {
 			echo $data->$value;
 		}
 	}

@@ -33,7 +33,7 @@ class Views {
         if (! $this->data ) {
             $this->data = $this->format_data( $this->apis->get() );
         }
-        $data = $this->data;
+        $data = $this->get_data();
         $icons = $this->icons;
         if ( $data ) {
             ob_start();
@@ -43,6 +43,10 @@ class Views {
         unset( $data );
 
         return $content;
+    }
+
+    function get_data() {
+        return clone $this->data;
     }
 
     function format_data( $data ) {
