@@ -62,7 +62,7 @@ class Views {
 			},
 			'windSpeed'  => function( $v, $values ) {
 				return sprintf(
-					'%s %01.1f / %01.1f knots %s',
+					'%s %01.0f / %01.0f knots %s',
 					str_replace( '180deg', ($values->winddir + 180) . 'deg', $this->icons->getSVG( 'wind' ) ),
 					$v / 1.852, // kph to knots
 					$values->windGust / 1.852, //kph to knots
