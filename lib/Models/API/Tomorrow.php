@@ -11,7 +11,7 @@ class Tomorrow {
 
 	function __construct($latlng, $options) {
 		$this->client  = new \GuzzleHttp\Client();
-		$this->api_key = '2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie';
+		$this->api_key = '';
 		$this->api_url = 'https://api.tomorrow.io/v4/timelines';
 		$this->latlng = $latlng;
 	}
@@ -59,7 +59,6 @@ class Tomorrow {
 		$body = json_encode( $body );
 
 		$request_url = "$this->api_url?apikey=$this->api_key";
-		// https://api.tomorrow.io/v4/timelines?apikey=2WKHCYOq4HTFbaD9gd3Q7zm8AunDMmie'
 
 		$response = $this->client->request(
 			'POST',

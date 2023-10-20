@@ -15,7 +15,7 @@ class Wunder {
 	function __construct() {
 		$this->client    = new \GuzzleHttp\Client( array( 'verify' => false ) );
 		$this->stationID = 'IKYNET36';
-		$this->api_key   = '806e8f0fde414af3ae8f0fde418af305';
+		$this->api_key   = '';
 		$this->api_url   = 'https://api.weather.com/v2/pws/observations/current';
 	}
 
